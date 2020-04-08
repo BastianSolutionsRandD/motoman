@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
     <xacro:include filename="$(find motoman_mh5_support)/urdf/mh5.transmission.xacro" />
-    <xacro:include filename="$(find motoman_mh5_support)/urdf/mh5.gazebo.xacro" />
+    <!--<xacro:include filename="$(find motoman_mh5_support)/urdf/mh5.gazebo.xacro" />-->
 
     <xacro:macro name="cylinder_inertial" params="radius length mass *origin">
         <inertial>
@@ -212,7 +212,7 @@
 		<!-- end of joint list -->
 
         <xacro:motoman_mh5_transmission prefix="${prefix}" />
-        <xacro:motoman_mh5_gazebo prefix="${prefix}" />
+        <!--<xacro:motoman_mh5_gazebo prefix="${prefix}" />-->
     </xacro:macro>
 </robot>
 
