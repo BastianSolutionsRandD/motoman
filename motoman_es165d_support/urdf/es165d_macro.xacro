@@ -67,6 +67,46 @@
             </geometry>
         </collision>
     </link>
+
+    <link name="${prefix}B_axis">
+        <visual>
+            <geometry>
+                <mesh filename="package://motoman_es165d_support/meshes/visual/B_axis.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://motoman_es165d_support/meshes/collision/B_axis.stl"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="${prefix}T_axis">
+        <visual>
+            <geometry>
+                <mesh filename="package://motoman_es165d_support/meshes/visual/T_axis.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://motoman_es165d_support/meshes/collision/T_axis.stl"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="${prefix}CWeight">
+        <visual>
+            <geometry>
+                <mesh filename="package://motoman_es165d_support/meshes/visual/CWeight.dae"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="package://motoman_es165d_support/meshes/collision/CWeight.stl"/>
+            </geometry>
+        </collision>
+    </link>
+
     <!-- end of link list -->
 
     <!-- joint list -->
@@ -75,7 +115,7 @@
         <child link="${prefix}S_axis"/>
         <origin xyz="0 0 0.302" rpy="0 0 0" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.9670" upper="2.9670" effort="212.66" velocity="6.5448"/>
+        <limit lower="${-pi}" upper="${pi}" effort="212.66" velocity="1.92"/>
     </joint>
 
     <joint name="${prefix}joint_2_l" type="revolute">
@@ -83,7 +123,7 @@
         <child link="${prefix}L_axis"/>
         <origin xyz="0.285 -0.082 0.348" rpy="${pi/2} 0 ${pi}" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.9670" upper="2.9670" effort="212.66" velocity="6.5448"/>
+        <limit lower="-1.07" upper="1.35" effort="212.66" velocity="1.92"/>
     </joint>
 
     <joint name="${prefix}joint_3_u" type="revolute">
@@ -91,16 +131,39 @@
         <child link="${prefix}U_axis"/>
         <origin xyz="0 1.150 -0.235" rpy="0 0 0" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.9670" upper="2.9670" effort="212.66" velocity="6.5448"/>
+        <limit lower="-1.89" upper="2.97" effort="212.66" velocity="1.92"/>
     </joint>
 
     <joint name="${prefix}joint_4_r" type="revolute">
         <parent link="${prefix}U_axis"/>
         <child link="${prefix}R_axis"/>
-        <origin xyz="1.225 -0.25 317" rpy="0 0 0" />
+        <origin xyz="0.25 1.225 0.317" rpy="${-pi/2} 0 0" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.9670" upper="2.9670" effort="212.66" velocity="6.5448"/>
+        <limit lower="-3.57792" upper="3.57792" effort="212.66" velocity="3.05"/>
     </joint>
+
+    <joint name="${prefix}joint_5_b" type="revolute">
+        <parent link="${prefix}R_axis"/>
+        <child link="${prefix}B_axis"/>
+        <origin xyz="0 0 0" rpy="0 ${-pi/2} ${pi/2}" />
+        <axis xyz="0 0 1" />
+        <limit lower="-2.0944" upper="2.0944" effort="212.66" velocity="2.53"/>
+    </joint>
+
+    <joint name="${prefix}joint_6_t" type="revolute">
+        <parent link="${prefix}B_axis"/>
+        <child link="${prefix}T_axis"/>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.49" upper="3.49" effort="212.66" velocity="4.19"/>
+    </joint>
+
+    <joint name="${prefix}joint_2_cw" type="fixed">
+        <parent link="${prefix}S_axis"/>
+        <child link="${prefix}CWeight"/>
+        <origin xyz="-0.32 0.0362 0.3381" rpy=" ${pi/2} 0 0" />
+    </joint>
+
 
     <!-- ROS base_link to Robot Manufacturer World Coordinates transform -->
     <link name="${prefix}base" />
@@ -112,4 +175,6 @@
 
     </xacro:macro>
 </robot>
+
+<!--/home/stephen/motoman_ws/src/motoman/motoman_es165d_support/urdf/es165d.xacro-->
 
