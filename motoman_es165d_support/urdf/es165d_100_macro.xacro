@@ -1,0 +1,181 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:include filename="$(find motoman_es165d_support)/urdf/es165d.transmission.xacro" />
+
+    <xacro:macro name="cylinder_inertial" params="radius length mass *origin">
+        <inertial>
+            <mass value="${mass}" />
+            <xacro:insert_block name="origin" />
+            <inertia ixx="${0.0833333 * mass * (3 * radius * radius + length * length)}" ixy="0.0" ixz="0.0"
+            iyy="${0.0833333 * mass * (3 * radius * radius + length * length)}" iyz="0.0"
+            izz="${0.5 * mass * radius * radius}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="motoman_es165d_100" params="prefix">
+        <!-- Inertia parameters -->
+        <!--TODO update all Mass parameters for the es165d arm, these are all incorrect!!-->
+        <xacro:property name="base_mass" value="4.0" />
+        <xacro:property name="shoulder_mass" value="3.7000" />
+        <xacro:property name="upper_arm_mass" value="8.3930" />
+        <xacro:property name="forearm_mass" value="2.2750" />
+        <xacro:property name="wrist_1_mass" value="1.2190" />
+        <xacro:property name="wrist_2_mass" value="1.2190" />
+        <xacro:property name="wrist_3_mass" value="0.1879" />
+
+        <!-- link list -->
+        <link name="${prefix}base_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_BASE_AXIS.dae" />
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_BASE_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.05" mass="${base_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_s">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_S_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_S_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.15" mass="${shoulder_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_l">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_L_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_L_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.56" mass="${upper_arm_mass}">
+                <origin xyz="0.0 0.0 0.28" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_u">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_100_U_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_100_U_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.5" mass="${forearm_mass}">
+                <origin xyz="0.0 0.0 0.25" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_r">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_R_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_R_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_1_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+		<link name="${prefix}link_b">
+			<visual>
+				<geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_B_AXIS.dae"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_B_AXIS.stl" />
+				</geometry>
+			</collision>
+            <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_2_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+		</link>
+		<link name="${prefix}link_t">
+			<visual>
+				<geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/visual/es165d_T_AXIS.dae" />
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+                    <mesh filename="package://motoman_es165d_support/meshes/es165d/collision/es165d_T_AXIS.stl" />
+				</geometry>
+			</collision>
+            <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_3_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+		</link>
+		<!-- end of link list -->
+		<!-- joint list -->
+		<joint name="${prefix}joint_s" type="revolute">
+			<parent link="${prefix}base_link"/>
+			<child link="${prefix}link_s"/>
+      <origin xyz="0 0 0.650" rpy="0 0 0"/>
+      <axis xyz="0 0 1" />
+      <limit lower="-${pi}" upper="${pi}" effort="10000" velocity="1.92" />
+		</joint>
+		<joint name="${prefix}joint_l" type="revolute">
+			<parent link="${prefix}link_s"/>
+			<child link="${prefix}link_l"/>
+      <origin xyz="0.285 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0" />
+      <limit lower="-1.04" upper="1.32" effort="10000" velocity="1.92" />
+		</joint>
+		<joint name="${prefix}joint_u" type="revolute">
+			<parent link="${prefix}link_l"/>
+			<child link="${prefix}link_u"/>
+      <origin xyz="0 0 1.150" rpy="0 0 0"/>
+      <axis xyz="0 -1 0" />
+      <limit lower="-1.41" upper="3.43" effort="10000" velocity="1.92" />
+		</joint>
+		<joint name="${prefix}joint_r" type="revolute">
+			<parent link="${prefix}link_u"/>
+			<child link="${prefix}link_r"/>
+      <origin xyz="1.590 0 0.250" rpy="0 0 0"/>
+			<axis xyz="-1 0 0" />
+      <limit lower="-${pi}" upper="${pi}" effort="10000" velocity="3.05" />
+		</joint>
+		<joint name="${prefix}joint_b" type="revolute">
+			<parent link="${prefix}link_r"/>
+			<child link="${prefix}link_b"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+			<axis xyz="0 -1 0" />
+      <limit lower="-2.26" upper="2.26" effort="10000" velocity="2.62" />
+		</joint>
+		<joint name="${prefix}joint_t" type="revolute">
+			<parent link="${prefix}link_b"/>
+			<child link="${prefix}link_t"/>
+            <origin xyz="0.225 0 0" rpy="0 0 0"/>
+			<axis xyz="-1 0 0" />
+      <limit lower="-${pi}" upper="${pi}" effort="10000" velocity="4.18" />
+		</joint>
+		<!-- end of joint list -->
+
+    <xacro:motoman_es165d_transmission prefix="${prefix}" />
+    </xacro:macro>
+</robot>
+
