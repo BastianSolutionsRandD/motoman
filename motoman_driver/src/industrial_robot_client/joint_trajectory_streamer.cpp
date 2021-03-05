@@ -102,6 +102,7 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const motoman_msgs::DynamicJoint
     else
       ROS_ERROR("Trajectory splicing not yet implemented, stopping current motion.");
 
+    ROS_ERROR("Stopping the trajectory.");
     this->mutex_.lock();
     trajectoryStop();
     this->mutex_.unlock();
@@ -125,12 +126,12 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const motoman_msgs::DynamicJoint
 
 void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTrajectoryConstPtr &msg)
 {
-  ROS_INFO("Receiving joint trajectory message");
+  ROS_ERROR("Receiving joint trajectory message of length %d", msg->points.size());
 
   // read current state value (should be atomic)
   int state = this->state_;
 
-  ROS_DEBUG("Current state is: %d", state);
+  ROS_ERROR("Current state is: %d", state);
   if (TransferStates::IDLE != state)
   {
     if (msg->points.empty())
@@ -138,6 +139,7 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTraj
     else
       ROS_ERROR("Trajectory splicing not yet implemented, stopping current motion.");
 
+    ROS_ERROR("Stopping the trajectory.");
     this->mutex_.lock();
     trajectoryStop();
     this->mutex_.unlock();
@@ -146,15 +148,19 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTraj
 
   if (msg->points.empty())
   {
-    ROS_INFO("Empty trajectory received while in IDLE state, nothing is done");
+    ROS_ERROR("Empty trajectory received while in IDLE state, nothing is done");
+    this->mutex_.lock();
+    trajectoryStop();
+    this->mutex_.unlock();
     return;
   }
-
+  ROS_ERROR("converting trajectory_to_msgs");
   // calc new trajectory
   std::vector<SimpleMessage> new_traj_msgs;
   if (!trajectory_to_msgs(msg, &new_traj_msgs))
     return;
 
+  ROS_ERROR("Sending to robot");
   // send command messages to robot
   send_to_robot(new_traj_msgs);
 }
