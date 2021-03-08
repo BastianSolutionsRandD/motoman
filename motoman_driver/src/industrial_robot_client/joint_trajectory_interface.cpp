@@ -722,6 +722,10 @@ bool JointTrajectoryInterface::is_valid(const motoman_msgs::DynamicJointTrajecto
 void JointTrajectoryInterface::jointStateCB(
   const sensor_msgs::JointStateConstPtr &msg)
 {
+  if(this->all_joint_names_.size() != msg->position.size()){
+//    ROS_ERROR("Recieved joint state that is not for the motoman arm: %s", msg->name[0].c_str());
+    return;
+  }
   this->cur_joint_pos_ = *msg;
 }
 
