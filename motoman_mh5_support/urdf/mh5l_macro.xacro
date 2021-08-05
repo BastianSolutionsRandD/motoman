@@ -1,0 +1,190 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:include filename="$(find motoman_mh5_support)/urdf/mh5.transmission.xacro" />
+    <!--<xacro:include filename="$(find motoman_mh5_support)/urdf/mh5.gazebo.xacro" />-->
+
+    <xacro:macro name="cylinder_inertial" params="radius length mass *origin">
+        <inertial>
+            <mass value="${mass}" />
+            <xacro:insert_block name="origin" />
+            <inertia ixx="${0.0833333 * mass * (3 * radius * radius + length * length)}" ixy="0.0" ixz="0.0"
+            iyy="${0.0833333 * mass * (3 * radius * radius + length * length)}" iyz="0.0"
+            izz="${0.5 * mass * radius * radius}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="motoman_mh5l" params="prefix">
+        <!-- Inertia parameters -->
+        <!--TODO update all Mass parameters for the mh5l arm, these are all incorrect!!-->
+        <xacro:property name="base_mass" value="4.0" />
+        <xacro:property name="shoulder_mass" value="3.7000" />
+        <xacro:property name="upper_arm_mass" value="8.3930" />
+        <xacro:property name="forearm_mass" value="2.2750" />
+        <xacro:property name="wrist_1_mass" value="1.2190" />
+        <xacro:property name="wrist_2_mass" value="1.2190" />
+        <xacro:property name="wrist_3_mass" value="0.1879" />
+
+        <!-- link list -->
+        <link name="${prefix}base_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_BASE_AXIS.dae" />
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_BASE_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.05" mass="${base_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_s">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_S_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_S_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.15" mass="${shoulder_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_l">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_L_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_L_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.56" mass="${upper_arm_mass}">
+                <origin xyz="0.0 0.0 0.28" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_u">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_U_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_U_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.06" length="0.5" mass="${forearm_mass}">
+                <origin xyz="0.0 0.0 0.25" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+        <link name="${prefix}link_r">
+            <visual>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_R_AXIS.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_R_AXIS.stl" />
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_1_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+        </link>
+		<link name="${prefix}link_b">
+			<visual>
+				<geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_B_AXIS.dae"/>
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_B_AXIS.stl" />
+				</geometry>
+			</collision>
+            <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_2_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+		</link>
+		<link name="${prefix}link_t">
+			<visual>
+				<geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/visual/MH5L_T_AXIS.dae" />
+				</geometry>
+			</visual>
+			<collision>
+				<geometry>
+                    <mesh filename="package://motoman_mh5_support/meshes/mh5l/collision/MH5L_T_AXIS.stl" />
+				</geometry>
+			</collision>
+            <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_3_mass}">
+                <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            </xacro:cylinder_inertial>
+		</link>
+		<!-- end of link list -->
+		<!-- joint list -->
+		<joint name="${prefix}joint_s" type="revolute">
+			<parent link="${prefix}base_link"/>
+			<child link="${prefix}link_s"/>
+			<origin xyz="0 0 0.1990" rpy="0 0 0"/>
+			<axis xyz="0 0 1" />
+      <limit lower="-2.96" upper="2.96" effort="100" velocity="2.96" />
+		</joint>
+		<joint name="${prefix}joint_l" type="revolute">
+			<parent link="${prefix}link_s"/>
+			<child link="${prefix}link_l"/>
+			<origin xyz="0.0880 0 0.1310" rpy="0 0 0"/>
+			<axis xyz="0 1 0" />
+      <limit lower="-1.13" upper="2.26" effort="100" velocity="2.96" />
+		</joint>
+		<joint name="${prefix}joint_u" type="revolute">
+			<parent link="${prefix}link_l"/>
+			<child link="${prefix}link_u"/>
+            <origin xyz="0 0 0.4000" rpy="0 0 0"/>
+			<axis xyz="0 -1 0" />
+      <!-- Old limits: lower="-2.3736" upper="4.4506" The new limits
+           below were measured from an MH5F.  They ensure that link_r
+           won't hit link_l even when joint_r is at 45 degrees.  The
+           old limits were converted directly from the MH5 data sheet,
+           which was clearly way off. -->
+      <!--<limit lower="-1.0122" upper="3.2218" effort="100" velocity="2.96" />-->
+      <limit lower="-1.0122" upper="2.0" effort="100" velocity="2.96" />
+		</joint>
+		<joint name="${prefix}joint_r" type="revolute">
+			<parent link="${prefix}link_u"/>
+			<child link="${prefix}link_r"/>
+            <origin xyz="0.0715 0 0.0400" rpy="0 0 0"/>
+			<axis xyz="-1 0 0" />
+      <limit lower="-3.31" upper="3.31" effort="100" velocity="3.48" />
+		</joint>
+		<joint name="${prefix}joint_b" type="revolute">
+			<parent link="${prefix}link_r"/>
+			<child link="${prefix}link_b"/>
+            <origin xyz="0.3335 0 0" rpy="0 0 0"/>
+			<axis xyz="0 -1 0" />
+      <limit lower="-2.06" upper="2.1" effort="100" velocity="3.48" />
+		</joint>
+		<joint name="${prefix}joint_t" type="revolute">
+			<parent link="${prefix}link_b"/>
+			<child link="${prefix}link_t"/>
+            <origin xyz="0.0800 0 0" rpy="0 0 0"/>
+			<axis xyz="-1 0 0" />
+      <!--<limit lower="-6.2831" upper="6.2831" effort="100" velocity="6.97" />-->
+      <limit lower="-4.0" upper="4.0" effort="100" velocity="6.97" />
+		</joint>
+		<!-- end of joint list -->
+
+        <xacro:motoman_mh5_transmission prefix="${prefix}" />
+        <!--<xacro:motoman_mh5_gazebo prefix="${prefix}" />-->
+    </xacro:macro>
+</robot>
+
