@@ -146,7 +146,10 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTraj
 
   if (msg->points.empty())
   {
-    ROS_INFO("Empty trajectory received while in IDLE state, nothing is done");
+    ROS_ERROR("Empty trajectory received while in IDLE state, sending trajectoryStop()");
+    this->mutex_.lock();
+    trajectoryStop();
+    this->mutex_.unlock();
     return;
   }
 

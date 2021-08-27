@@ -60,10 +60,10 @@ namespace joint_trajectory_streamer
 namespace
 {
   const double pos_stale_time_ = 1.0;  // max time since last "current position" update, for validation (sec)
-  const double start_pos_tol_  = 1e-4;  // max difference btwn start & current position, for validation (rad)
+  const double start_pos_tol_  = 2e-2;  // max difference btwn start & current position, for validation (rad)
 }
 
-#define ROS_ERROR_RETURN(rtn, ...) do {ROS_ERROR(__VA_ARGS__); return(rtn);} while (0)  // NOLINT(whitespace/braces)
+#define ROS_ERROR_RETURN(rtn,...) do {ROS_ERROR(__VA_ARGS__); return(rtn);} while(0)
 
 // override init() to read "robot_id" parameter and subscribe to joint_states
 bool MotomanJointTrajectoryStreamer::init(SmplMsgConnection* connection, const std::map<int, RobotGroup> &robot_groups,
@@ -77,7 +77,7 @@ bool MotomanJointTrajectoryStreamer::init(SmplMsgConnection* connection, const s
   rtn &= JointTrajectoryStreamer::init(connection, robot_groups, velocity_limits);
 
   motion_ctrl_.init(connection, 0);
-  for (size_t i = 0; i < robot_groups_.size(); i++)
+  for (int i = 0; i < robot_groups_.size(); i++)
   {
     MotomanMotionCtrl motion_ctrl;
 
@@ -119,54 +119,56 @@ bool MotomanJointTrajectoryStreamer::init(SmplMsgConnection* connection, const s
 
 MotomanJointTrajectoryStreamer::~MotomanJointTrajectoryStreamer()
 {
-  // TODO( ): Find better place to call StopTrajMode
+  //TODO Find better place to call StopTrajMode
   motion_ctrl_.setTrajMode(false);   // release TrajMode, so INFORM jobs can run
 }
 
 bool MotomanJointTrajectoryStreamer::disableRobotCB(std_srvs::Trigger::Request &req,
                                            std_srvs::Trigger::Response &res)
 {
+
   trajectoryStop();
 
-  bool ret = motion_ctrl_.setTrajMode(false);
+  bool ret = motion_ctrl_.setTrajMode(false);  
   res.success = ret;
-
-  if (!res.success)
-  {
-    res.message = "Motoman robot was NOT disabled. Please re-examine and retry.";
+  
+  if (!res.success) {
+    res.message="Motoman robot was NOT disabled. Please re-examine and retry.";
     ROS_ERROR_STREAM(res.message);
   }
-  else
-  {
-    res.message = "Motoman robot is now disabled and will NOT accept motion commands.";
+  else {
+    res.message="Motoman robot is now disabled and will NOT accept motion commands.";
     ROS_WARN_STREAM(res.message);
   }
+    
 
   return true;
+
 }
 
-bool MotomanJointTrajectoryStreamer::enableRobotCB(std_srvs::Trigger::Request& req, std_srvs::Trigger::Response& res)
+bool MotomanJointTrajectoryStreamer::enableRobotCB(std_srvs::Trigger::Request &req,
+						   std_srvs::Trigger::Response &res)
 {
-  bool ret = motion_ctrl_.setTrajMode(true);
+  bool ret = motion_ctrl_.setTrajMode(true);  
   res.success = ret;
-
-  if (!res.success)
-  {
-    res.message = "Motoman robot was NOT enabled. Please re-examine and retry.";
+  
+  if (!res.success) {
+    res.message="Motoman robot was NOT enabled. Please re-examine and retry.";
     ROS_ERROR_STREAM(res.message);
   }
-  else
-  {
-    res.message = "Motoman robot is now enabled and will accept motion commands.";
+  else {
+    res.message="Motoman robot is now enabled and will accept motion commands.";
     ROS_WARN_STREAM(res.message);
   }
 
   return true;
+
 }
 
+
+  
 // override create_message to generate JointTrajPtFull message (instead of default JointTrajPt)
-bool MotomanJointTrajectoryStreamer::create_message(int seq, const trajectory_msgs::JointTrajectoryPoint& pt,
-                                                    SimpleMessage* msg)
+bool MotomanJointTrajectoryStreamer::create_message(int seq, const trajectory_msgs::JointTrajectoryPoint &pt, SimpleMessage *msg)
 {
   JointTrajPtFull msg_data;
   JointData values;
@@ -217,8 +219,7 @@ bool MotomanJointTrajectoryStreamer::create_message(int seq, const trajectory_ms
   return jtpf_msg.toRequest(*msg);  // assume "request" COMM_TYPE for now
 }
 
-bool MotomanJointTrajectoryStreamer::create_message_ex(int seq, const motoman_msgs::DynamicJointPoint& point,
-                                                       SimpleMessage* msg)
+bool MotomanJointTrajectoryStreamer::create_message_ex(int seq, const motoman_msgs::DynamicJointPoint &point, SimpleMessage *msg)
 {
   JointTrajPtFullEx msg_data_ex;
   JointTrajPtFullExMessage jtpf_msg_ex;
@@ -300,8 +301,7 @@ bool MotomanJointTrajectoryStreamer::create_message_ex(int seq, const motoman_ms
   return jtpf_msg_ex.toRequest(*msg);  // assume "request" COMM_TYPE for now
 }
 
-bool MotomanJointTrajectoryStreamer::create_message(int seq, const motoman_msgs::DynamicJointsGroup& pt,
-                                                    SimpleMessage* msg)
+bool MotomanJointTrajectoryStreamer::create_message(int seq, const motoman_msgs::DynamicJointsGroup &pt, SimpleMessage *msg)
 {
   JointTrajPtFull msg_data;
   JointData values;
