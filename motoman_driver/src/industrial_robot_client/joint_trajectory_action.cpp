@@ -314,6 +314,7 @@ void JointTrajectoryAction::cancelCB(JointTractoryActionServer::GoalHandle gh)
 
 void JointTrajectoryAction::goalCB(JointTractoryActionServer::GoalHandle gh, int group_number)
 {
+  ROS_ERROR("Received new goal JointTractoryActionServer");
   if (!gh.getGoal()->trajectory.points.empty())
   {
     if (industrial_utils::isSimilar(
@@ -434,6 +435,7 @@ void JointTrajectoryAction::cancelCB(
   ROS_DEBUG("Received action cancel request");
   if (active_goal_map_[group_number] == gh)
   {
+    ROS_ERROR("Canceling goal");
     // Stops the controller.
     motoman_msgs::DynamicJointTrajectory empty;
     empty.joint_names = robot_groups_[group_number].get_joint_names();
@@ -580,6 +582,7 @@ void JointTrajectoryAction::controllerStateCB(
 
 void JointTrajectoryAction::abortGoal()
 {
+  ROS_ERROR("Aboring goal");
   // Stops the controller.
   trajectory_msgs::JointTrajectory empty;
   pub_trajectory_command_.publish(empty);

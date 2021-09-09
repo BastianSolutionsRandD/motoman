@@ -102,6 +102,7 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const motoman_msgs::DynamicJoint
     else
       ROS_ERROR("Trajectory splicing not yet implemented, stopping current motion.");
 
+    ROS_ERROR("Stopping the trajectory.");
     this->mutex_.lock();
     trajectoryStop();
     this->mutex_.unlock();
@@ -138,6 +139,7 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTraj
     else
       ROS_ERROR("Trajectory splicing not yet implemented, stopping current motion.");
 
+    ROS_ERROR("Stopping the trajectory.");
     this->mutex_.lock();
     trajectoryStop();
     this->mutex_.unlock();
@@ -152,7 +154,7 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTraj
     this->mutex_.unlock();
     return;
   }
-
+  ROS_ERROR("converting trajectory_to_msgs");
   // calc new trajectory
   std::vector<SimpleMessage> new_traj_msgs;
   if (!trajectory_to_msgs(msg, &new_traj_msgs))
