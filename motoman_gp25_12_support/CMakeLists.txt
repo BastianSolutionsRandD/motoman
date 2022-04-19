@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-project(motoman_gp25-12_support)
+project(motoman_gp25_12_support)
 
 find_package(catkin REQUIRED)
 

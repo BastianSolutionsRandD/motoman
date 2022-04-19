@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>motoman_gp25-12_support</name>
+  <name>motoman_gp25_12_support</name>
   <version>0.3.5</version>
   <description>
     <p>ROS-Industrial support for the Motoman gp25 (and variants).</p>
@@ -17,9 +17,9 @@
     </ul>
     <p>      
       Joint limits and maximum joint velocities are based on the information 
-      found in the online documentation files for the robot (GP25-12_2D.zip
-      and GP25-12_3D.zip from
-      https://www.motoman.com/en-us/products/robots/industrial/assembly-handling/gp-series/gp25-12
+      found in the online documentation files for the robot (gp25_12_2D.zip
+      and gp25_12_3D.zip from
+      https://www.motoman.com/en-us/products/robots/industrial/assembly-handling/gp-series/gp25_12
       All urdfs are based on the default motion and joint velocity limits, 
       unless noted otherwise.
     </p>
@@ -35,7 +35,7 @@
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 
-  <url type="website">http://wiki.ros.org/motoman_gp25-12_support</url>
+  <url type="website">http://wiki.ros.org/motoman_gp25_12_support</url>
   <url type="bugtracker">https://github.com/ros-industrial/motoman/issues</url>
   <url type="repository">https://github.com/ros-industrial/motoman</url>
 
