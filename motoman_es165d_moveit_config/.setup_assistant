@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: motoman_es165d_support
+    relative_path: urdf/es165d.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/motoman_es165d.srdf
+  CONFIG:
+    author_name: Stephen Earl
+    author_email: searl@bastiansolutions.com
+    generated_timestamp: 1595352882
